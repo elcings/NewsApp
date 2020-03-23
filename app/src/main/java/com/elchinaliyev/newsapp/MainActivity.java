@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
                detail.putExtra("content",response.getDescription());
                detail.putExtra("imageUtl",response.getUrlToImage());
                detail.putExtra("title",response.getTitle());
+               detail.putExtra("date",response.getPublishedAt());
+               detail.putExtra("author",response.getAuthor());
+               detail.putExtra("link",response.getUrl());
                startActivity(detail);
             }
         });
