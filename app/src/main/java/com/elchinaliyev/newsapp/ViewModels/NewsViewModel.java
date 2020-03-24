@@ -14,15 +14,17 @@ import androidx.lifecycle.ViewModel;
 public class NewsViewModel extends AndroidViewModel {
     private MutableLiveData<NewsResponse> newsResponseLiveData;
     private NewsRepository newsRepository;
+    String country;
 
-    public NewsViewModel(@NonNull Application application) {
+    public NewsViewModel(@NonNull Application application,String country) {
         super(application);
+        this.country=country;
         if(newsResponseLiveData!=null)
         {
             return;
         }
         newsRepository= NewsRepository.getInstance();
-        newsResponseLiveData=newsRepository.getNew("us","9a6ef87028564b8795f336b2fa2519b1");
+        newsResponseLiveData=newsRepository.getNew(country,"9a6ef87028564b8795f336b2fa2519b1");
 
     }
     public LiveData<NewsResponse>getNews()

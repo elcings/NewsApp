@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.elchinaliyev.newsapp.Adapter.NewsAdapter;
 import com.elchinaliyev.newsapp.Model.Country;
 import com.elchinaliyev.newsapp.Model.NewsArticle;
 import com.elchinaliyev.newsapp.Model.NewsResponse;
+import com.elchinaliyev.newsapp.ViewModels.Factory;
 import com.elchinaliyev.newsapp.ViewModels.NewsViewModel;
 
 import java.util.ArrayList;
@@ -27,72 +30,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity  {
 
     ArrayList<NewsArticle> articleArrayList = new ArrayList<>();
     NewsAdapter newsAdapter;
     RecyclerView rvHeadline;
     NewsViewModel newsViewModel;
-    Spinner spinner;
-    ArrayAdapter<Country> adapterSpinner;
-    String[] country;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        List<Country>countryList=new ArrayList<>();
-        countryList.add(new Country("France","fr"));
-        countryList.add(new Country("USA","us"));
-        countryList.add(new Country("Turkey","tr"));
-        countryList.add(new Country("Russia","ru"));
-        adapterSpinner = new ArrayAdapter(this, android.R.layout.simple_spinner_item, countryList);
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapterSpinner);
+        if(isNetworkConnected()) {
+            newsViewModel = new Factory(getApplication(), "tr").create(NewsViewModel.class);
+            setupRecyclerView();
+            newsViewModel.getNews().observe(this, new Observer<NewsResponse>() {
+                @Override
+                public void onChanged(NewsResponse newsResponse) {
+                    List<NewsArticle> newsArticles = newsResponse.getArticles();
+                    articleArrayList.addAll(newsArticles);
+                    newsAdapter.notifyDataSetChanged();
+                }
+            });
+            newsAdapter.setOnclickListener(new NewsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(NewsArticle response) {
+                    Log.d("Elcin", response.getSource().getName());
+                    Intent detail = new Intent(MainActivity.this, DetailsActivity.class);
+                    detail.putExtra("content", response.getDescription());
+                    detail.putExtra("imageUtl", response.getUrlToImage());
+                    detail.putExtra("title", response.getTitle());
+                    detail.putExtra("date", response.getPublishedAt());
+                    detail.putExtra("author", response.getAuthor());
+                    detail.putExtra("link", response.getUrl());
+                    startActivity(detail);
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this,"Internet bağlantısını kontrol edin",Toast.LENGTH_LONG).show();
 
-
-        newsViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(NewsViewModel.class);
-        setupRecyclerView();
-        newsViewModel.getNews().observe(this, new Observer<NewsResponse>() {
-            @Override
-            public void onChanged(NewsResponse newsResponse) {
-                List<NewsArticle> newsArticles = newsResponse.getArticles();
-                articleArrayList.addAll(newsArticles);
-                newsAdapter.notifyDataSetChanged();
-            }
-        });
-        newsAdapter.setOnclickListener(new NewsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(NewsArticle response) {
-                Log.d("Elcin", response.getSource().getName());
-                Intent detail = new Intent(MainActivity.this, DetailsActivity.class);
-                detail.putExtra("content", response.getDescription());
-                detail.putExtra("imageUtl", response.getUrlToImage());
-                detail.putExtra("title", response.getTitle());
-                detail.putExtra("date", response.getPublishedAt());
-                detail.putExtra("author", response.getAuthor());
-                detail.putExtra("link", response.getUrl());
-                startActivity(detail);
-            }
-        });
+        }
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Country con=(Country) parent.getSelectedItem();
-        Toast.makeText(MainActivity.this, con.getShortName(), Toast.LENGTH_LONG).show();
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void init() {
-        spinner = findViewById(R.id.spinnerCounrty);
-        spinner.setOnItemSelectedListener(this);
         rvHeadline = findViewById(R.id.recView);
     }
 
@@ -106,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             newsAdapter.notifyDataSetChanged();
         }
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
 
