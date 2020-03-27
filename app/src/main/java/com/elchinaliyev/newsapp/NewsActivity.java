@@ -49,25 +49,33 @@ public class NewsActivity extends AppCompatActivity {
         init();
         Intent intent=getIntent();
         String source= intent.getStringExtra("source");
-      Log.d("ElcinSource", source);
+         Log.d("ElcinSource", source);
         newsViewModel = new Factory(getApplication(), source).create(NewsViewModel.class);
 
-        //setupRecyclerView();
+        setupRecyclerView();
           newsViewModel.getNews().observe(this, new Observer<NewsResponse>() {
                 @Override
                 public void onChanged(NewsResponse newsResponse) {
-                    dialog.show();
                     List<NewsArticle> newsArticles = newsResponse.getArticles();
-                    title.setText(newsResponse.getArticles().get(0).getTitle());
-                    author.setText(newsResponse.getArticles().get(0).getAuthor());
-                    if(newsResponse.getArticles().get(0).getUrlToImage().length()>0) {
-                        Picasso.get().load(newsResponse.getArticles().get(0).getUrlToImage())
-                                .placeholder((R.drawable.ic_launcher_background))
-                                .error(R.drawable.ic_launcher_background).into(kenView);
+                    if(newsResponse.getArticles().get(0).getTitle()!=null) {
+                        if (newsResponse.getArticles().get(0).getTitle().length() > 0) {
+                            title.setText(newsResponse.getArticles().get(0).getTitle());
+                        }
+                    }
+                    if(newsResponse.getArticles().get(0).getAuthor()!=null) {
+                        if (newsResponse.getArticles().get(0).getAuthor().length() > 0) {
+                            author.setText(newsResponse.getArticles().get(0).getAuthor());
+                        }
+                    }
+                    if(newsResponse.getArticles().get(0).getUrlToImage()!=null) {
+                        if (newsResponse.getArticles().get(0).getUrlToImage().length() > 0) {
+                            Picasso.get().load(newsResponse.getArticles().get(0).getUrlToImage())
+                                    .placeholder((R.drawable.nophoto))
+                                    .error(R.drawable.nophoto).into(kenView);
+                        }
                     }
                      articleArrayList.addAll(newsArticles);
                      setupRecyclerView();
-                     dialog.dismiss();
                 }
             });
 

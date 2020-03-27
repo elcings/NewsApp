@@ -1,6 +1,7 @@
 package com.elchinaliyev.newsapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.elchinaliyev.newsapp.MainActivity;
 import com.elchinaliyev.newsapp.Model.IconBetterIdea;
 import com.elchinaliyev.newsapp.Model.NewsArticle;
 import com.elchinaliyev.newsapp.Model.Source;
 import com.elchinaliyev.newsapp.Model.WebSite;
 import com.elchinaliyev.newsapp.Network.IconApi;
 import com.elchinaliyev.newsapp.Network.IconService;
+import com.elchinaliyev.newsapp.NewsActivity;
 import com.elchinaliyev.newsapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +35,7 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
     ArrayList<Source> sources;
     Context context;
     IconApi iconApi;
-    private OnItemClickListener listener;
+
 
     public SourceAdapter(Context context, ArrayList<Source> sources) {
         this.sources = sources;
@@ -99,17 +102,13 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     int position=getAdapterPosition();
-                    if(listener!=null&&position!=RecyclerView.NO_POSITION)
-                        listener.onItemClick(sources.get(position));
+                    if(position!=RecyclerView.NO_POSITION) {
+                        Intent intent = new Intent(context, NewsActivity.class);
+                        intent.putExtra("source", sources.get(position).getId());
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
-    }
-    public interface OnItemClickListener {
-        void onItemClick(Source source);
-    }
-
-    public void setOnclickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }

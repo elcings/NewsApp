@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Paper.init(this);
         init();
-       // Paper.book().delete("cache");
         load(false);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -66,16 +65,6 @@ public class MainActivity extends AppCompatActivity  {
                 load(true);
             }
         });
-        sourceAdapter.setOnclickListener(new SourceAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Source source) {
-               Intent intent=new Intent(MainActivity.this,NewsActivity.class);
-               intent.putExtra("source",source.getId());
-               startActivity(intent);
-
-            }
-        });
-
     }
 
     private void init() {
@@ -85,12 +74,9 @@ public class MainActivity extends AppCompatActivity  {
         rvHeadline.setLayoutManager(new LinearLayoutManager(this));
         rvHeadline.setItemAnimator(new DefaultItemAnimator());
         rvHeadline.setNestedScrollingEnabled(true);
-
-
     }
 
     private void setupRecyclerView() {
-
         sourceAdapter = new SourceAdapter(MainActivity.this, sources);
         sourceAdapter.notifyDataSetChanged();
         rvHeadline.setAdapter(sourceAdapter);
@@ -107,11 +93,9 @@ public class MainActivity extends AppCompatActivity  {
           String cache=  Paper.book().read("cache");
           if(cache!=null&&!cache.isEmpty())
           {
-              Log.d("Elcin",cache);
               WebSite site =new Gson().fromJson(cache,WebSite.class);
               List<Source> sourcesList=site.getSourceList();
               sources.addAll(sourcesList);
-              Log.d("Elcin",sources.size()+"");
               setupRecyclerView();
           }
           else
@@ -147,7 +131,6 @@ public class MainActivity extends AppCompatActivity  {
         else
         {
             if(isNetworkConnected()) {
-               //setupRecyclerView();
                 sourceViewModel = new SourceFactory(getApplication(), "en").create(SourceViewModel.class);
                 sourceViewModel.getSource().observe(this, new Observer<WebSite>() {
                     @Override
@@ -157,6 +140,7 @@ public class MainActivity extends AppCompatActivity  {
                         setupRecyclerView();
                         Paper.book().write("cache", new Gson().toJson(webSite));
                         swipe.setRefreshing(false);
+
                     }
                 });
                 sourceViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
@@ -169,6 +153,7 @@ public class MainActivity extends AppCompatActivity  {
                         }
                     }
                 });
+
             }
             else
             {
