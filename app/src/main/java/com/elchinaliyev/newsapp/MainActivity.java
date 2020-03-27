@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     }
                 });
-                sourceViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+               /* sourceViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
                         if (aBoolean) {
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity  {
                             dialog.dismiss();
                         }
                     }
-                });
+                });*/
 
             }
             else

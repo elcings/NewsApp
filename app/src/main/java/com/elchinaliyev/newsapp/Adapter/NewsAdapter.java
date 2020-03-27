@@ -1,6 +1,7 @@
 package com.elchinaliyev.newsapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.elchinaliyev.newsapp.Common.ISO8601Parse;
+import com.elchinaliyev.newsapp.DetailsActivity;
 import com.elchinaliyev.newsapp.Model.NewsArticle;
 import com.elchinaliyev.newsapp.Model.NewsResponse;
+import com.elchinaliyev.newsapp.NewsActivity;
 import com.elchinaliyev.newsapp.R;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.squareup.picasso.Picasso;
@@ -101,8 +104,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.Holder> {
                 @Override
                 public void onClick(View v) {
                     int position=getAdapterPosition();
-                    if(listener!=null&&position!=RecyclerView.NO_POSITION)
-                    listener.onItemClick(articles.get(position));
+                    Log.d("position",position+"");
+
+                    if(position!=RecyclerView.NO_POSITION)
+                    {
+                        if(articles.get(position).getUrl()!=null) {
+                            Log.d("LINK",articles.get(position).getUrl());
+                            Intent intent = new Intent(context, DetailsActivity.class);
+                            intent.putExtra("webUrl", articles.get(position).getUrl());
+                            context.startActivity(intent);
+                        }
+                    }
+
                 }
             });
         }

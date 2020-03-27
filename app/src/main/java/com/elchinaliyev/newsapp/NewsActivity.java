@@ -78,22 +78,6 @@ public class NewsActivity extends AppCompatActivity {
                      setupRecyclerView();
                 }
             });
-
-
-          // newsAdapter.setOnclickListener(new NewsAdapter.OnItemClickListener() {
-             //   @Override
-             //   public void onItemClick(NewsArticle response) {
-                   /* Log.d("Elcin", response.getSource().getName());
-                    Intent detail = new Intent(NewsActivity.this, DetailsActivity.class);
-                    detail.putExtra("content", response.getDescription());
-                    detail.putExtra("imageUtl", response.getUrlToImage());
-                    detail.putExtra("title", response.getTitle());
-                    detail.putExtra("date", response.getPublishedAt());
-                    detail.putExtra("author", response.getAuthor());
-                    detail.putExtra("link", response.getUrl());
-                    startActivity(detail);*/
-             //   }
-           // });
     }
     private void init() {
         newsRec = findViewById(R.id.newsRec);
