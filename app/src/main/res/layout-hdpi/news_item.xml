@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="15dp">
-        <RelativeLayout
-            android:layout_margin="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="8dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/ivNews"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_launcher_background"
-                app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"/>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/source_image"
+            android:layout_width="0dp"
+            android:src="@drawable/nophoto"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:scaleType="centerCrop" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:layout_weight="8"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
+                android:id="@+id/articleName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/ivNews"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tvDesc"
-                android:layout_width="match_parent"
+            <com.github.curioustechizen.ago.RelativeTimeTextView
+                android:id="@+id/articleTime"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvName"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/ivNews"
-                android:text="Description"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-        </RelativeLayout>
+                />
+        </LinearLayout>
+    </LinearLayout>
+
 </androidx.cardview.widget.CardView>

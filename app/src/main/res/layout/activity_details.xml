@@ -59,8 +59,7 @@
 
         <TextView
             android:id="@+id/publishDate"
-            android:layout_marginTop="0dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="3dp"
             android:text="10.20.2020"
             android:layout_alignParentEnd="true"
             android:layout_width="match_parent"

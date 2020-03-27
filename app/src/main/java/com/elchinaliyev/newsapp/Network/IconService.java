@@ -5,11 +5,9 @@ import android.util.Log;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitService {
-    private static String BASE_URL="https://newsapi.org/v2/";
-    public static String API_KEY="9a6ef87028564b8795f336b2fa2519b1";
+public class IconService {
     private static Retrofit retrofit=new Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://i.olsh.me/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
